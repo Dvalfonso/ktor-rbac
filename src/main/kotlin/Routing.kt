@@ -2,6 +2,9 @@ package com.dvalfonso
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.dvalfonso.repos.UserRepository
+import com.dvalfonso.routes.userRoutes
+import com.dvalfonso.service.UserService
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -22,10 +25,14 @@ fun Application.configureRouting() {
             call.respondText(text = "500: $cause" , status = HttpStatusCode.InternalServerError)
         }
     }
+
+    val userRepository = UserRepository()
+    val userService = UserService(userRepository)
+
     routing {
         get("/") {
             call.respondText("Hello World!")
         }
-        userRoutes()
+        userRoutes(userService)
     }
 }
