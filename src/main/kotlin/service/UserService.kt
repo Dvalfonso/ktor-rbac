@@ -5,21 +5,30 @@ import com.dvalfonso.models.dtos.RegisterUserDto
 import com.dvalfonso.models.dtos.UserDto
 import com.dvalfonso.models.utils.toDto
 import com.dvalfonso.repos.UserRepository
+import io.ktor.client.request.request
+import io.ktor.http.cio.parseRequest
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class UserService(private val userRepository: UserRepository) {
     fun getAll(): List<UserDto> =
-        userRepository.findAll().map { it.toDto() }
+        userRepository.findAll()
 
     fun getById(id: Long): UserDto =
-        userRepository.findById(id)?.toDto()
-            ?: throw NoSuchElementException("User not found")
+        userRepository.findById(id) ?: throw NoSuchElementException("User not found")
 
-    fun create(request: RegisterUserDto): UserDto =
-        userRepository
-            .create(request.username, request.password, request.email, roleNames = listOf("USER"))
-            .toDto()
+    fun create(request: RegisterUserDto): UserDto {
+        val roles = listOf("USER")
+
+        val user = userRepository.create(
+            username = request.username,
+            email = request.email,
+            passwordHash = request.password,
+            roleNames = roles
+        )
+
+        return user
+    }
 
     fun update(
         id: Long,
@@ -29,7 +38,6 @@ class UserService(private val userRepository: UserRepository) {
     ): UserDto =
         userRepository
             .update(id, username, email, roles)
-            ?.toDto()
             ?: throw NoSuchElementException("User not found")
 
     fun delete(id: Long) {

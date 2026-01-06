@@ -16,5 +16,13 @@ fun UserEntity.toDto(): UserDto =
         id = this.id.value,
         username = this.username,
         email = this.email,
-        roles = this.roles.map { it.rolename }
+        roles = roles?.map { it.rolename } ?: emptyList()
+    )
+
+fun UserEntity.toDtoWithRoles(roles: List<String>): UserDto =
+    UserDto(
+        id = this.id.value,
+        username = this.username,
+        email = this.email,
+        roles = roles
     )

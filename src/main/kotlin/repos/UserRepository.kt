@@ -4,6 +4,9 @@ import com.dvalfonso.models.RolesTable
 import com.dvalfonso.models.UsersTable
 import com.dvalfonso.models.dao.RoleEntity
 import com.dvalfonso.models.dao.UserEntity
+import com.dvalfonso.models.dtos.UserDto
+import com.dvalfonso.models.utils.toDto
+import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class UserRepository {
@@ -16,34 +19,40 @@ class UserRepository {
         passwordHash: String,
         email: String,
         roleNames: List<String>
-    ): UserEntity = transaction {
+    ): UserDto = transaction {
 
         val roles = RoleEntity
             .find { RolesTable.name inList roleNames }
+            .toList()
 
-        UserEntity.new {
+        val user = UserEntity.new {
             this.username = username
             this.passwordHash = passwordHash
             this.email = email
-            this.roles = roles
         }
+
+        user.roles = SizedCollection(roles)
+
+        user.toDto()
     }
+
 
     /* ========================
        READ
     ========================= */
 
-    fun findById(id: Long): UserEntity? = transaction {
-        UserEntity.findById(id)
+    fun findById(id: Long): UserDto? = transaction {
+        val user = UserEntity.findById(id) ?: return@transaction null
+        user.toDto()
     }
 
     fun findByUsername(username: String): UserEntity? = transaction {
         UserEntity.find { UsersTable.username eq username }
-            .singleOrNull()
+            .singleOrNull()//Cambiar
     }
 
-    fun findAll(): List<UserEntity> = transaction {
-        UserEntity.all().toList()
+    fun findAll(): List<UserDto> = transaction {
+        UserEntity.all().map {it.toDto()}
     }
 
     /* ========================
@@ -55,7 +64,7 @@ class UserRepository {
         username: String?,
         email: String?,
         roleNames: List<String>?
-    ): UserEntity? = transaction {
+    ): UserDto? = transaction {
 
         val user = UserEntity.findById(id) ?: return@transaction null
 
@@ -65,10 +74,11 @@ class UserRepository {
         roleNames?.let {
             val roles = RoleEntity
                 .find { RolesTable.name inList it }
-            user.roles = roles
+                .toList()
+            user.roles = SizedCollection(roles)
         }
 
-        user
+        user.toDto()
     }
 
     /* ========================
