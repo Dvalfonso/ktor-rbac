@@ -1,4 +1,4 @@
-package com.dvalfonso.models.dtos
+package com.dvalfonso.models.dtos.Auth
 
 import kotlinx.serialization.Serializable
 

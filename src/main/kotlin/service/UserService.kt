@@ -1,8 +1,8 @@
 package com.dvalfonso.service
 
 import com.dvalfonso.models.UsersTable
-import com.dvalfonso.models.dtos.RegisterUserDto
-import com.dvalfonso.models.dtos.UserDto
+import com.dvalfonso.models.dtos.Auth.RegisterUserDto
+import com.dvalfonso.models.dtos.user.UserDto
 import com.dvalfonso.models.utils.toDto
 import com.dvalfonso.repos.UserRepository
 import io.ktor.client.request.request

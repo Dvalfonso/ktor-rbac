@@ -1,5 +1,6 @@
-package com.dvalfonso.models.dtos
+package com.dvalfonso.models.dtos.Auth
 
+import com.dvalfonso.models.dtos.user.UserDto
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -1,7 +1,7 @@
 package com.dvalfonso.routes
 
 import com.dvalfonso.models.dao.UserEntity
-import com.dvalfonso.models.dtos.RegisterUserDto
+import com.dvalfonso.models.dtos.Auth.RegisterUserDto
 import com.dvalfonso.service.UserService
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive

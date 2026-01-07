@@ -1,10 +1,10 @@
 package com.dvalfonso.models.utils
 
 import com.dvalfonso.models.dao.UserEntity
-import com.dvalfonso.models.dtos.UserDto
+import com.dvalfonso.models.dtos.user.UserDto
 
 fun UserEntity.allPermisions() : Set<String> {
-    return this.roles.flatMap {// flatMap une las listas (Recordar que un rol puede tener varios permisos)
+    return this.roles.flatMap {// flatMap une las listas (Un rol puede tener varios permisos)
         it.permissions.map {
             permissionEntity -> permissionEntity.name
         }

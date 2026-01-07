@@ -4,7 +4,7 @@ import com.dvalfonso.models.RolesTable
 import com.dvalfonso.models.UsersTable
 import com.dvalfonso.models.dao.RoleEntity
 import com.dvalfonso.models.dao.UserEntity
-import com.dvalfonso.models.dtos.UserDto
+import com.dvalfonso.models.dtos.user.UserDto
 import com.dvalfonso.models.utils.toDto
 import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.transactions.transaction
